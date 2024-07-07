@@ -232,7 +232,56 @@ void enum_test(){
 	}
 	enum_test();
 }
+void switch_case_test(){
+	day today = Thursday;
+	switch(today){
+		case Sunday:
+			cout << "Today is Sunday!" << endl;
+			break;
+		case Monday:
+			cout << "Today is Monday!" << endl;
+			break;
+		case Tuesday:
+			cout << "Today is Tuesday!" << endl;
+			break;
+		case Wednesday:
+			cout << "Today is Wednesday!" << endl;
+			break;
+		case Thursday:
+			cout << "Today is Thursday!" << endl;
+			break;
+		case Friday:
+			cout << "Today is Friday!" << endl;
+			break;
+		case Saturday:
+			cout << "Today is Saturday!" << endl;
+			break;
+	}
+}
+void dowhile_test(){
+	long num;
+	int i = 0;
+	cout << "Type a number: ";
+	cin >> num;
+	do{
+		cout << "Wow, index of: " << i << endl;
+		i++;
+	}while(i<num);
+}
+void continue_test(){
+	//division by itlsef - avoiding 0/0
+	long iWantToDie;
+	cout << "Type number to do the division: ";
+	cin >> iWantToDie;
+	for(iWantToDie; iWantToDie > -4; iWantToDie--){
+		if(!iWantToDie) continue;
+		cout << iWantToDie << "/" << iWantToDie << " = " << iWantToDie/iWantToDie << endl;
+					
+	}
+
+}
+
 int main() {
-	multi_dimentional_arrays();
+	continue_test();
 	return 0;
 }	
