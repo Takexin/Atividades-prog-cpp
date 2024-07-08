@@ -280,8 +280,62 @@ void continue_test(){
 	}
 
 }
+void goto_test(){
+	int number;
+	cout << "Division of number by other numbers" << endl;
+	cout << "Type the number: ";
+	cin >>	number;
+	for(int i=number; i>=0; i--){
+		if(i == 0) goto END_LOOP;
+		cout << number << " / " << i << " = " << number/i;
+	}
+	exit(0);
+	END_LOOP: cerr << "Ending loop to avoid dividing by 0";
+}
+void pointer_adresses(){
+	int bananas = 10;
+	int oranges = 20;
+	cout << "I have " << bananas << " Bananas at the address " << &bananas << endl;
+	cout << "I have " << oranges << " Oranges at the address " << &oranges << endl;
 
+	int integer, *pointer;
+
+	integer = 1;
+	pointer = &integer;
+
+	int integer2 = 2, *const pointer2 = &integer2;
+
+	//changing integer's data
+	*pointer = 2;
+
+	cout << "The value of the integer is: " << *pointer << endl;
+}
+void dynamic_memory_storage(){
+	double *pi = new double;
+	//checking if the program could not allocate memory for the pointer
+	if(*pi == NULL)exit(1);
+	*pi = 3.14159;
+	cout << "The value of pi = " << *pi << endl;
+
+	delete pi;
+}
+void pointer_arithmetic(){
+	double values[4] = {0.1, 1.1234, 2.2, 3.5};
+	double *pointer = &values[0]; //same thing as double *pointer = values;
+	for(int i = 0; i <=3; i++){
+		cout << "*pointer + " << i << " = " << *(pointer + i) << endl;
+	}
+}
+void struct_pointer(){
+	struct structure{
+		string text;
+		int numbers[100];
+	} structure1;
+	structure *pointer = &structure1;
+	pointer -> text = "Whoah, using the arrow operator instead of (*pointer).text";
+	cout << structure1.text << endl; //or pointer -> text
+}
 int main() {
-	continue_test();
+	struct_pointer();
 	return 0;
 }	
