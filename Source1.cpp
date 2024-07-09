@@ -2,7 +2,7 @@
 #include "functions.h"
 using namespace std;
 
-//only use prototypes if the functions require arguments, wowies
+//only use prototypes if the functions require arguments, wowies (that is a lie)
 int main(int argc, char *argv[]) {
 	bool_test();
 	return 0;
