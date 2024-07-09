@@ -1,7 +1,12 @@
-#include "userheader"
+#include "userheader.h"
+#include "functions.h"
 using namespace std;
-using namespace abi;
 
+//only use prototypes if the functions require arguments, wowies
+int main(int argc, char *argv[]) {
+	bool_test();
+	return 0;
+}	
 void bool_test(){
 	bool is_true;
 	cout << "If you want the boolean to be true, type '1': ";
@@ -38,10 +43,10 @@ void const_test(){
 	int days = WEEK_DAYS;
 	char test = 'a';
 	cout << "There are " << days << " days in a week." << endl;
-	cout << "The data type of week days is: " << __cxa_demangle(typeid(WEEK_DAYS).name(), 0, 0, 0) << endl;
+	cout << "The data type of week days is: " << (typeid(WEEK_DAYS).name(), 0, 0, 0) << endl;
 }
 void typeof_test(string input_var){
-	cout << "The data type of this variable is: " << __cxa_demangle(typeid(input_var).name(), 0, 0, 0) << endl;
+	cout << "The data type of this variable is: " << (typeid(input_var).name(), 0, 0, 0) << endl;
 }
 void type_cast_test(){
 	// Example of an explicit type cast from a float to a pi, note that
@@ -167,7 +172,19 @@ struct person{
 		string first_name;
 		string last_name;
 		int age;
-	};
+	}plamp;
+//making anonymous struct
+struct{
+	bool is_dog, is_cat;
+	int age;
+}coquinha, cindy;
+//initializing struct
+struct is_truthful{
+	bool is_true;
+	bool is_false;
+	double truh_per;
+	double false_per;
+};
 
 void person_struct_test(){
 	person ralph;
@@ -178,7 +195,20 @@ void person_struct_test(){
 	ralph.age = 69;
 	cout << "The first person is " << ralph.first_name <<
 	" " << ralph.last_name << ", age " << ralph.age << endl;
+
+	coquinha.is_cat = true;
+	coquinha.is_dog = false;
+	cindy.is_cat = false;
+	cindy.is_dog = true;
+
+	is_truthful isnt = {false, true, 0, 20};
+	//assigning structure to another structure
+	is_truthful isnt_question_mark = isnt;
+	cout << "Is it true? " << isnt.is_true << endl;
+	typedef bool i_want_to_die;
+	i_want_to_die sleepy = true;
 }
+
 union one_union{
 		double double_var;
 		double double_var2;
@@ -232,7 +262,106 @@ void enum_test(){
 	}
 	enum_test();
 }
-int main() {
-	multi_dimentional_arrays();
-	return 0;
-}	
+
+void pointer2ptr(){
+	int integer = 1, *pointer, **pointer2;
+	pointer = &integer;
+	pointer2 = &pointer;
+	cout << **pointer2 << endl;
+}
+void pointer_arrays(){
+	double arr[5] = {0.5, 0.69, 1.23, 3.14, 5.55};
+	double *pointer = arr;
+	cout << "*pointer = " << *pointer << endl;
+	cout << "*(++pointer) = " << pointer[1] << endl; //or *(++pointer) 
+}
+void delete_pointer_array(){
+	double *values = new double[10];
+	if(values == NULL)exit(1);
+	values[5] = 3.14159;
+
+	cout << "Stored value: " << values[5] << endl;
+	cout << "Also stored value: " << *(values + 5) << endl;
+	delete[] values; 
+}
+void multi_dimensioned_array_pointer(){
+	float (*pointer)[200][300];
+	pointer = new float[100][200][300];
+	delete[	] pointer;
+}
+void pointers_to_cstyle_strings(){
+	const char *message = "This points to a c-style string!";
+	cout << message << endl;
+
+	char string1[] = "We are building a house!";
+	char string2[] = "ing";
+	char *string3;
+	string3 = strstr(string1,string2);
+	cout << string3 << endl;
+
+	char word1[] = "Wassup";
+	char word2[] = " brotha";
+	char *word3;
+	word3 = strcat(word1,word2);
+	cout << word3 << endl;
+
+	person *pointer = &plamp;
+	pointer->age = 10;
+	pointer->first_name = "Clamp";
+	(*pointer).last_name = "Robertson";
+	cout << plamp.first_name << endl;
+	cout << (*pointer).last_name << endl;
+
+}
+
+struct structure{
+	int integer1;
+	int integer2;
+	struct structure *next;
+}structure1, structure2, structure3;
+void struct_pointer_linked(){
+	structure1.next = &structure2; //setup linked list
+	structure2.next = &structure3;
+
+	structure2.integer1 = 5;
+	//accessing the value of integer1 through the first structure
+	cout << "Value of integer1 of structure2 = " <<structure1.next->integer1 << endl;
+}
+void auto_pointers(){
+	auto_ptr<string> pointer (new string ("Hello from automatically deleted pointer!"));
+	cout << *pointer << endl;
+}
+void const_pointer_rules(){
+	//Way 1 of using constant pointers
+	int integer1 = 5;
+	const int *pointer1 = &integer1;
+	//Way 2
+	const int integer2 = 5;
+	const int *pointer2 = &integer2;
+	//Way3
+	const int integer3 = 5; //or int integer3 = 5;
+	const int * const pointer3 = &integer3;
+	//Incorrect way
+	/*
+	const int integer3 = 5;
+	int *pointer3 = &integer3;
+	*/
+}
+void casting_pointers(){
+	int integer = 5;
+	void *pointer = &integer;
+	cout << "The value of the integer is " << *(static_cast <int * > (pointer)) << endl;
+
+	//casting away constness
+	char *ptr;
+	const char *const_ptr;
+	ptr = const_cast <char *> (const_ptr);
+
+	//using reinterpret cast (most powerful) to set an address directly to a pointer
+	pointer = reinterpret_cast<int *> (0xb0000000);
+}
+void command_lines(int argc, char * argv[]){
+	for(int i = 0; i < argc; i++){
+		cout << argv[i] << endl;
+	}
+}
