@@ -1,9 +1,12 @@
-#include <iostream>
-#include <cstring>
-#include <typeinfo>
-#include <memory>
+#include "userheader.h"
+#include "functions.h"
 using namespace std;
 
+//only use prototypes if the functions require arguments, wowies
+int main(int argc, char *argv[]) {
+	bool_test();
+	return 0;
+}	
 void bool_test(){
 	bool is_true;
 	cout << "If you want the boolean to be true, type '1': ";
@@ -328,7 +331,37 @@ void auto_pointers(){
 	auto_ptr<string> pointer (new string ("Hello from automatically deleted pointer!"));
 	cout << *pointer << endl;
 }
-int main() {
-	auto_pointers();
-	return 0;
-}	
+void const_pointer_rules(){
+	//Way 1 of using constant pointers
+	int integer1 = 5;
+	const int *pointer1 = &integer1;
+	//Way 2
+	const int integer2 = 5;
+	const int *pointer2 = &integer2;
+	//Way3
+	const int integer3 = 5; //or int integer3 = 5;
+	const int * const pointer3 = &integer3;
+	//Incorrect way
+	/*
+	const int integer3 = 5;
+	int *pointer3 = &integer3;
+	*/
+}
+void casting_pointers(){
+	int integer = 5;
+	void *pointer = &integer;
+	cout << "The value of the integer is " << *(static_cast <int * > (pointer)) << endl;
+
+	//casting away constness
+	char *ptr;
+	const char *const_ptr;
+	ptr = const_cast <char *> (const_ptr);
+
+	//using reinterpret cast (most powerful) to set an address directly to a pointer
+	pointer = reinterpret_cast<int *> (0xb0000000);
+}
+void command_lines(int argc, char * argv[]){
+	for(int i = 0; i < argc; i++){
+		cout << argv[i] << endl;
+	}
+}
