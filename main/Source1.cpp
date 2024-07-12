@@ -2,9 +2,34 @@
 #include "functions.h"
 using namespace std;
 
-//only use prototypes if the functions require arguments, wowies (that is a lie)
+//only use prototypes if the functions require arguments, wowies
 int main(int argc, char *argv[]) {
-	bool_test();
+	caller_function("This hurts my brain", printem);
+	int value = 10;
+	cout << "I am going fucking crayz holy shit " << value << endl;
+	adder_ptr(&value, 1, 5);
+	cout << "value is now equal to: " << value << endl;
+	adder_reference(value);
+	cout << "this is using references: " << value << endl;
+	int number = 6;
+	int *ptr = &number;
+	caller_function(ptr, factorial);
+
+	//using template to adder
+	cout << '\n' << "adding numbers with templates" << endl;
+	double pi = 3.1415;
+	cout << "3.1415 + 0.1234 = " << adder_template(pi, double(0.1234)) << endl;
+
+	//using inline function test (placed in header file)
+	cout << printing_bogus() << endl;
+
+	//using default argument
+	cout << '\n' <<"Testing default argument:" << endl;
+	printem();
+
+	//using alias and references
+	cout << '\n' << "Testing alias and references: " << endl;
+	references();
 	return 0;
 }	
 void bool_test(){
@@ -327,10 +352,13 @@ void struct_pointer_linked(){
 	//accessing the value of integer1 through the first structure
 	cout << "Value of integer1 of structure2 = " <<structure1.next->integer1 << endl;
 }
+/* AUTO_PTR IS DEPRECATED
 void auto_pointers(){
 	auto_ptr<string> pointer (new string ("Hello from automatically deleted pointer!"));
 	cout << *pointer << endl;
 }
+*/
+
 void const_pointer_rules(){
 	//Way 1 of using constant pointers
 	int integer1 = 5;
@@ -362,6 +390,76 @@ void casting_pointers(){
 }
 void command_lines(int argc, char * argv[]){
 	for(int i = 0; i < argc; i++){
-		cout << argv[i] << endl;
+		cout << *(argv + i) << endl;
 	}
+}
+long array_adder(const int array[], int number_elements)
+//declared aray as constant since its a constant pointer,
+//might change values in array
+{ 
+	long sum = 0;
+	for(int i=0; i < number_elements; i++){
+		sum = sum + *(array + i); // used pointer notation
+	}
+	return sum;
+}
+void print_string(const char *text){
+	cout << text << endl;
+}
+char* return_greeting(){
+		char message[] = "What is up, brotha";
+        char *text = new char[strlen(message) + 1];
+        strcpy(text, "What is up, brotha");
+        return text;
+}
+void factorial(int *value, int num){
+	cout << "initial value of num: " << num << endl;
+	if((*value) != 1){
+		num = (num * ((*value)-1));
+		*value = *value - 1;
+		cout << "num = " << num << endl;
+		cout << "value: "<< *value << endl; 
+		factorial(value, num);
+		
+	}
+}
+void printem(string text){
+	cout << text << endl;
+}
+void caller_function(string text, void(*pointer_to_function)(string)){
+	(*pointer_to_function)(text);
+}
+void caller_function(int *value, void(*pointer_to_function)(int*, int)){ //function overloading, i am a fucking genious
+	(*pointer_to_function)(value,*value);
+}
+void adder_ptr(int *num, int num_add,int repetition){
+	if(repetition != 0){
+		(*num) = (*num) + num_add;
+		repetition --;
+		adder_ptr(num, num_add, repetition);
+	}
+}
+void adder_reference(int & num){
+	num = num + 100;
+}
+
+void print_this(int value){cout << value<< endl;}
+
+template <typename T>
+T adder_template(T &num, T num2){
+	return num + num2;
+}
+void references(){
+	int couches = 100;
+	int & sofas = couches;
+
+	cout << "Address of couches: " << &couches << endl;
+	cout << "Address of sofas: " << &sofas << endl;
+
+	cout << "Number of couches: " << couches << endl;
+	cout << "Number of sofas: " << sofas << endl;
+
+	couches++;
+	cout << "Number of couches: " << couches << endl;
+	cout << "Number of sofas: " << sofas << endl;
 }
