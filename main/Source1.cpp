@@ -1,35 +1,115 @@
+
 #include "userheader.h"
 #include "functions.h"
 using namespace std;
 
+
+
 //only use prototypes if the functions require arguments, wowies
 int main(int argc, char *argv[]) {
-	caller_function("This hurts my brain", printem);
-	int value = 10;
-	cout << "I am going fucking crayz holy shit " << value << endl;
-	adder_ptr(&value, 1, 5);
-	cout << "value is now equal to: " << value << endl;
-	adder_reference(value);
-	cout << "this is using references: " << value << endl;
-	int number = 6;
-	int *ptr = &number;
-	caller_function(ptr, factorial);
+	// caller_function("This hurts my brain", printem);
+	// int value = 10;
+	// cout << "I am going fucking crayz holy shit " << value << endl;
+	// adder_ptr(&value, 1, 5);
+	// cout << "value is now equal to: " << value << endl;
+	// adder_reference(value);
+	// cout << "this is using references: " << value << endl;
+	// int number = 6;
+	// int *ptr = &number;
+	// caller_function(ptr, factorial);
 
-	//using template to adder
-	cout << '\n' << "adding numbers with templates" << endl;
-	double pi = 3.1415;
-	cout << "3.1415 + 0.1234 = " << adder_template(pi, double(0.1234)) << endl;
+	// //using template to adder
+	// cout << '\n' << "adding numbers with templates" << endl;
+	// double pi = 3.1415;
+	// adder_template(pi, double(0.1234));
+	// cout << "3.1415 + 0.1234 = " << pi << endl;
 
-	//using inline function test (placed in header file)
-	cout << printing_bogus() << endl;
+	// //using inline function test (placed in header file)
+	// cout << printing_bogus() << endl;
 
-	//using default argument
-	cout << '\n' <<"Testing default argument:" << endl;
-	printem();
+	// //using default argument
+	// cout << '\n' <<"Testing default argument:" << endl;
+	// printem();
 
-	//using alias and references
-	cout << '\n' << "Testing alias and references: " << endl;
-	references();
+	// //using alias and references
+	// cout << '\n' << "Testing alias and references: " << endl;
+	// references();
+
+	// //using references as argument and return value
+	// cout << "Using references as argument and return value" << '\n';
+	// person Dan = {
+	// 	"Dan",
+	// 	"The man",
+	// 	50,
+	// };
+	// cout << "Current age of Dan: " << Dan.age << '\n';
+	// returning_references(Dan);
+	// cout << "Age of Dan after aditon: " << Dan.age << '\n';
+	// returning_references(returning_references(Dan));
+	// cout << "Age of dan after two consecutive additions: " << Dan.age << '\n'; 
+
+	// //using static automatic variables in functions
+	// cout << "Using static automatic variables in functions: " << '\n';
+
+	// int array1[] = {3, 5, 6, 5, 67};
+	// cout << "Number of elements in array1 = " << sizes_of_arrays(array1, 5) << '\n';
+
+	// int array2[] = {3, 5, 9, 10};
+	// cout << "Number of elements in array1 and array2 = " << sizes_of_arrays(array2, 4) << '\n';
+
+	// //using specific template specializations
+	// cout << "using specific template specializations: " << '\n';
+	// string write_text = "Wus poppin";
+	// adder_template(write_text, string("This is great")); 
+
+	//Testing classes
+	cout << "Testing classes, bird watching: " << '\n';
+	cout << bird_class::info() << '\n';
+	bird_class oriole("oriole");
+	oriole.increment_count();
+	cout << "Number of " << oriole.name << "s seen: " << oriole.get_count() << '\n' << '\n';
+
+	bird_class eagle("eagle");
+	eagle.set_seen(20);
+	cout << "Which have I seen more between eagles and orioles: " << eagle.compare(oriole).name << '\n';
+	cout << "Seen: " << eagle.compare(oriole).get_count() << " times \n";
+
+	const bird_class birds[] = {bird_class(string("blue jay"), 5), bird_class(string("robin"), 3), bird_class(string("pidgeon"), 25), bird_class(string("amogus"), 125)};
+	cout << "I have seen more " << compare_multiple(birds, 4).name << '\n';
+	cout << "Seen: " << compare_multiple(birds, 4).get_count() << " times \n";
+
+	bird_class *ptr_bird = ::new bird_class(string("Big man"), 69);//original new
+	void (bird_class::*function_ptr)();//pointer to class method
+	function_ptr = &bird_class::increment_count; 
+	(ptr_bird->*function_ptr)();//calling pointer to method
+	(eagle.*function_ptr)();//calling pointer to method
+	int number_eagles = eagle;
+	eagle++;
+	(*ptr_bird)++; 
+	cout << (*ptr_bird).get_count();
+	display(*ptr_bird + eagle);
+	display(eagle);
+	display(eagle + 5);
+	::delete ptr_bird;//original delete
+	bird_class *bird_pointer = new bird_class("Over", 0);//overloaded new
+	cout << *bird_pointer;
+
+	delete bird_pointer;//overloaded delete
+	int number_addition = 5 + eagle;
+	cout << "Adding overloaded + with integers: 1" << number_addition << '\n';
+
+
+	//testing custom class
+	// cout << "Testing custom class (made by yours truly)" << '\n';
+	// great_person jonathan("Jonathan");
+	// great_person peter = string("peter"); //initializing object with one argument                         
+	// cout << "This is " << jonathan.get_name() << ". He is " << jonathan.get_age() << " years old." << '\n';
+	// jonathan.age_adder();
+	// cout << "jonathan is magically " << jonathan.get_age() << " years old now" << '\n' << '\n';
+
+	//Testing stack class
+	// stack_class stack(200);
+	// stack.stack_pusher(10);
 	return 0;
 }	
 void bool_test(){
@@ -193,23 +273,6 @@ void StyleCString(){
 	char word[] = "HELLO";
 	cout << word << endl;
 }
-struct person{
-		string first_name;
-		string last_name;
-		int age;
-	}plamp;
-//making anonymous struct
-struct{
-	bool is_dog, is_cat;
-	int age;
-}coquinha, cindy;
-//initializing struct
-struct is_truthful{
-	bool is_true;
-	bool is_false;
-	double truh_per;
-	double false_per;
-};
 
 void person_struct_test(){
 	person ralph;
@@ -397,7 +460,17 @@ long array_adder(const int array[], int number_elements)
 //declared aray as constant since its a constant pointer,
 //might change values in array
 { 
-	long sum = 0;
+	static long sum = 0;
+	for(int i=0; i < number_elements; i++){
+		sum = sum + *(array + i); // used pointer notation
+	}
+	return sum;
+}
+long array_adder(const char array[], int number_elements)
+//declared aray as constant since its a constant pointer,
+//might change values in array
+{ 
+	static long sum = 0;
 	for(int i=0; i < number_elements; i++){
 		sum = sum + *(array + i); // used pointer notation
 	}
@@ -446,8 +519,12 @@ void adder_reference(int & num){
 void print_this(int value){cout << value<< endl;}
 
 template <typename T>
-T adder_template(T &num, T num2){
-	return num + num2;
+void adder_template(T &num, T num2){
+	num += num2;
+}
+template <> void adder_template(string &text, string text2){
+	cout << "Sorry pal, you cannot do that!" << '\n';
+	cout << "'" << text << "'" << " and " << "'"<<text2 <<"'" << " are not defined." << '\n';
 }
 void references(){
 	int couches = 100;
@@ -463,3 +540,20 @@ void references(){
 	cout << "Number of couches: " << couches << endl;
 	cout << "Number of sofas: " << sofas << endl;
 }
+
+person & returning_references(person & person_ref){
+	person_ref.age++;
+	return person_ref;
+}
+
+int sizes_of_arrays(int arr[], int number_items){
+	static int sum = 0;
+	for(int i=0; i < number_items; i++){sum++;}
+	return sum;
+}
+int sizes_of_arrays(char arr[], int number_items){
+	static int sum = 0;
+	for(int i=0; i < number_items; i++){sum++;}
+	return sum;
+}
+
