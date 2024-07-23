@@ -9,11 +9,18 @@ private:
     int number;
 public:
     explicit Array(int number_of_elemets){
-        number = number_of_elemets;
-        pointer_to_array = new T[number];
-        for(int i = 0; i < number; i++){
-            pointer_to_array[i] = default_value;//did not let me use pointer notation, crying
+        string str = typeid(T).name();
+        if(str.find("string") != string::npos){
+            number = number_of_elemets;
+            pointer_to_array = new T[number];
+            for(int i = 0; i < number; i++){
+                pointer_to_array[i] = default_value;//did not let me use pointer notation, crying
+            }
         }
+        else{
+            throw Exception(string("Error:  used string as item value"));
+        }
+        
     }
     Array(const Array &arr){//copy constructor (since were using pointers)
         number = arr.number;
@@ -44,6 +51,8 @@ public:
         return *this;
     }
 };
+
+
 int main(){
     bird_class oriole(string("Oriole"), 23);
     weirdo_watcher jonathan(string("Jonathan"));
@@ -72,7 +81,11 @@ int main(){
     const int *ptr = &scores[0];
     cout << arr_size(ptr) << '\n';
 
-
-
+    try{
+        Array <string, 5> fail(5);
+    }
+    catch (Exception e){
+        cout << e.get_name() << '\n';
+    }
     return 0;
 }

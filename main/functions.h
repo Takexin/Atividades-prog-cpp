@@ -206,7 +206,13 @@ using namespace std;
         }
     }
 
-
+    class Exception{
+    public:
+        explicit Exception(string s){name = s;}
+        string get_name(){return name;}
+    private:
+        string name;
+    };
     template <typename T>
     T arr_size(const T *arr){
         T i = 0;
