@@ -1,6 +1,7 @@
 #include <iostream>
 #include "functions.h"
 #include <typeinfo>
+#include <exception>
 
 template <class T, int default_value>//class templates
 class Array{
@@ -10,7 +11,7 @@ private:
 public:
     explicit Array(int number_of_elemets){
         string str = typeid(T).name();
-        if(str.find("string") != string::npos){
+        if(str.find("string") == string::npos){
             number = number_of_elemets;
             pointer_to_array = new T[number];
             for(int i = 0; i < number; i++){
@@ -18,7 +19,8 @@ public:
             }
         }
         else{
-            throw Exception(string("Error:  used string as item value"));
+            throw Exception(string("Error: used string as item value"));
+
         }
         
     }
@@ -50,6 +52,14 @@ public:
         }
         return *this;
     }
+};
+
+class Custom_error : public exception{
+private:
+    string error_message;
+public:
+    const string what(){return error_message;} //get message method
+    Custom_error(){error_message = "Error: Custom_error...";}
 };
 
 
@@ -87,5 +97,14 @@ int main(){
     catch (Exception e){
         cout << e.get_name() << '\n';
     }
+    try{
+        if(1 > 0){
+            throw Custom_error();
+        }
+    }
+    catch (Custom_error err){
+        cout << err.what() << '\n';
+    }
+
     return 0;
 }
