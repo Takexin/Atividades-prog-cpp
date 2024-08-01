@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Abbaba/Documents/GitHub/Atividades-prog-cpp/main",
-      "program": "c:/Users/Abbaba/Documents/GitHub/Atividades-prog-cpp/main/build/Debug/outDebug",
+      "cwd": "c:/Users/Abbaba/Documents/GitHub/Atividades-prog-cpp/shopping list",
+      "program": "c:/Users/Abbaba/Documents/GitHub/Atividades-prog-cpp/shopping list/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

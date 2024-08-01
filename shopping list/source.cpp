@@ -1,16 +1,21 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 static int item_num = 0;
 class item{
 public:
     std::string name;
-    item(std::string s){name = s; item_num++; self_number=item_num;}
-    item(item &other_item){
-        name = other_item.name;
-        self_number = other_item.self_number;
+    item(std::string s){
+        name = s;
+        item_num++;
+        self_number=item_num;
     }
+    // item(item &other_item){
+    //     name = other_item.name;
+    //     self_number = other_item.self_number;
+    // }
     int get_num(){return self_number;}
     void set_num(int num){self_number = num;}
     friend void display(item &item){
@@ -33,15 +38,17 @@ private:
 };
 
 std::string file_name;
+std::vector<item> item_vector;
 void main_loop(std::ofstream &file, std::ifstream &file_read){
     int option = 0;
     while (option != 4)
     {
-        std::cout << "What would you like to do?\nAdd item: 1\nRead Items: 2\n Clear items: 3 \nExit: 4" << std::endl;
+        std::cout << "What would you like to do?\nAdd item: 1\nRead Items: 2\nClear items: 3 \nExit: 4" << std::endl;
         std::cin>> option;
+        std::cout << "\n\n\n\n\n\n\n\n\n\n";
         if(option==1){
             if(!file.is_open()){
-                file.open(file_name, std::ios_base::app);
+                file.open(file_name, std::ios_base::out | std::ios_base::app | std::ios_base::binary);
             }
             std::cin.ignore(1, '\n');
             std::string desired_item;
@@ -49,17 +56,25 @@ void main_loop(std::ofstream &file, std::ifstream &file_read){
             std::getline(std::cin, desired_item); 
             item desired_object(desired_item);
             
-            append_to_file(desired_object, file);
+            file.write(reinterpret_cast< char *>(&desired_object), sizeof(item));
             std::cout << "Item created with the name" << desired_item << '\n';
-
             file.close();
         }
         else if(option == 2){
             std::cin.ignore(1, '\n');
-            char c;
-            while (file_read.get(c)){std::cout << c;}
-            std::cout << '\n';
+
+            file_read.open(file_name, std::ios_base::in | std::ios_base::binary);
+            file_read.read(reinterpret_cast<char *> (&item_vector), item_num * sizeof(item));
+            for(int i =0; i < item_num; i++){
+                std::cout << item_vector[i] << 'a';
+            }
             
+        }
+        else if(option == 3){
+            file.close();
+            file.open(file_name);
+            file << " asdfd ";
+            std::cout << "File cleared \n";
         }
     }
     file.close();
