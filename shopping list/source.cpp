@@ -12,10 +12,13 @@ public:
         item_num++;
         self_number=item_num;
     }
-    // item(item &other_item){
-    //     name = other_item.name;
-    //     self_number = other_item.self_number;
-    // }
+    item(item &other_item){
+        name = other_item.name;
+        self_number = other_item.self_number;
+    }
+    item(){
+}
+
     int get_num(){return self_number;}
     void set_num(int num){self_number = num;}
     friend void display(item &item){
@@ -48,7 +51,7 @@ void main_loop(std::ofstream &file, std::ifstream &file_read){
         std::cout << "\n\n\n\n\n\n\n\n\n\n";
         if(option==1){
             if(!file.is_open()){
-                file.open(file_name, std::ios_base::out | std::ios_base::app | std::ios_base::binary);
+                file.open(file_name, std::ios_base::out | std::ios_base::binary);
             }
             std::cin.ignore(1, '\n');
             std::string desired_item;
@@ -57,23 +60,21 @@ void main_loop(std::ofstream &file, std::ifstream &file_read){
             item desired_object(desired_item);
             
             file.write(reinterpret_cast< char *>(&desired_object), sizeof(item));
-            std::cout << "Item created with the name" << desired_item << '\n';
+            std::cout << "Item created with the name: " << desired_item << '\n';
             file.close();
         }
         else if(option == 2){
             std::cin.ignore(1, '\n');
 
+	    item b;
             file_read.open(file_name, std::ios_base::in | std::ios_base::binary);
-            file_read.read(reinterpret_cast<char *> (&item_vector), item_num * sizeof(item));
-            for(int i =0; i < item_num; i++){
-                std::cout << item_vector[i] << 'a';
-            }
-            
+            file_read.read(reinterpret_cast<char *> (&b), sizeof(item));
+	    display(b);           
         }
         else if(option == 3){
             file.close();
             file.open(file_name);
-            file << " asdfd ";
+            file << " ";
             std::cout << "File cleared \n";
         }
     }
