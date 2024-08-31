@@ -21,7 +21,7 @@ public:
   friend void display(client &cli);
 };
 void display(client &cli){
-    std::cout << cli.getUsername() << '\n' << cli.getPassword();
+    std::cout << cli.getUsername() << '\n' << cli.getPassword() << '\n';
 }
 
 int getCharacter(std::fstream &stream, std::string filename){
@@ -35,25 +35,35 @@ void setCharacter(std::fstream &stream, std::string filename, int num){
     stream.open(filename, std::ios_base::binary | std::ios_base::out);
     stream.seekp(0);
     stream.write(reinterpret_cast<char * >(&num), sizeof(int));
-    stream.close();    
+    stream.close();
 }
-void writeElement(std::fstream & stream, std::string filename, client &user){
-    int num = getCharacter(stream, filename);
+void writeElement(std::fstream & stream, std::string filename, std::string numfile, client &user){
+    int num = getCharacter(stream, numfile);
     num++;
-    stream.open(filename, std::ios_base::binary | std::ios_base::out | std::ios_base::app);
-    stream.seekp(0);
+    stream.open(numfile, std::ios_base::binary | std::ios_base::out);
     stream.write(reinterpret_cast<char * >(&num), sizeof(int));
     stream.close();
     stream.open(filename, std::ios_base::binary | std::ios_base::out | std::ios_base::app);
     stream.write(reinterpret_cast<char *> (&user), sizeof(client));
     stream.close();
 }
+void ReadElements(std::fstream & stream, std::string filename, std::string numfile){
+    int num = getCharacter(stream, numfile);
+    std::vector <client> users;
+    stream.open(filename, std::ios_base::in | std::ios_base::binary);
+    stream.read(reinterpret_cast <char *> (&users), num * sizeof(client));
+    for(int i = 0; i <=num; i++){
+        display(users[i]);
+    }
+}
 int main(){
     std::fstream stream;
+    std::string writefile = "data.dat";
+    std::string numfile = "numbers.dat";
     client user1(std::string("mr.president1"), std::string("obamasas last name"));
-    writeElement(stream, std::string("data.dat"), user1);
-    setCharacter(stream, std::string("data.dat") ,3);
-    int num = getCharacter(stream, std::string("data.dat"));
+
+    //writeElement(stream, writefile, numfile, user1);
+    int num = getCharacter(stream, numfile);
     std::cout << num;//please work for gods sake
     return 0;
 }
