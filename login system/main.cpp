@@ -21,18 +21,33 @@ public:
   friend void display(client &cli);
 };
 void display(client &cli){
-    std::cout << cli.getUsername() << '\n' << cli.getPassword() << '\n';
+    std::cout << cli.username << '\n' << cli.password << '\n';
 }
 
 int getCharacter(std::fstream &stream, std::string filename){
     int elementsNum;
     stream.open(filename, std::ios_base::binary | std::ios_base::in);
+    if (!stream.is_open()) {
+        std::cerr << "Failed to open file: " << filename << std::endl;
+        exit(1);
+    }
     stream.read(reinterpret_cast<char * >(&elementsNum), sizeof(int));
-    stream.close();
-    return elementsNum;
+    if(!stream.peek() == std::ifstream::traits_type::eof()){
+        stream.close();
+        return 0;
+    }
+    else{
+        stream.close();
+        return elementsNum;
+    }
+    
 }
 void setCharacter(std::fstream &stream, std::string filename, int num){
     stream.open(filename, std::ios_base::binary | std::ios_base::out);
+    if (!stream.is_open()) {
+        std::cerr << "Failed to open file: " << filename << std::endl;
+        exit(1);
+    }
     stream.seekp(0);
     stream.write(reinterpret_cast<char * >(&num), sizeof(int));
     stream.close();
@@ -41,29 +56,66 @@ void writeElement(std::fstream & stream, std::string filename, std::string numfi
     int num = getCharacter(stream, numfile);
     num++;
     stream.open(numfile, std::ios_base::binary | std::ios_base::out);
+    if (!stream.is_open()) {
+        std::cerr << "Failed to open file: " << filename << std::endl;
+        exit(1);
+    }
     stream.write(reinterpret_cast<char * >(&num), sizeof(int));
     stream.close();
     stream.open(filename, std::ios_base::binary | std::ios_base::out | std::ios_base::app);
+    if (!stream.is_open()) {
+        std::cerr << "Failed to open file: " << filename << std::endl;
+        exit(1);
+    }
     stream.write(reinterpret_cast<char *> (&user), sizeof(client));
     stream.close();
 }
-void ReadElements(std::fstream & stream, std::string filename, std::string numfile){
-    int num = getCharacter(stream, numfile);
-    std::vector <client> users;
+void ReadElements(std::fstream & stream, std::fstream & numstream, std::string filename, std::string numfile){
+    int num = getCharacter(numstream, numfile);
+    std::vector <client> users(num);
+    client userTest;
+    std::cout << num << '\n';
     stream.open(filename, std::ios_base::in | std::ios_base::binary);
-    stream.read(reinterpret_cast <char *> (&users), num * sizeof(client));
-    for(int i = 0; i <=num; i++){
-        display(users[i]);
+    if (!stream.is_open()) {
+        std::cerr << "Failed to open file: " << filename << std::endl;
+        exit(1);
     }
+    stream.read(reinterpret_cast <char *> (&userTest), num * sizeof(client));
+    std::cout << sizeof(userTest) << ' ' << sizeof(client) << '\n';
+    std::cout << "usrname" << userTest.getPassword();
+    // for(int i = 0; i < num; i++){
+    //     std::cout << userTest.getPassword() << '\n';
+    //     std::cout << userTest.getUsername() << '\n';
+    // }
 }
+int option;
 int main(){
+    //setting up filenames and file stream object
     std::fstream stream;
+    std::fstream numstream;
     std::string writefile = "data.dat";
     std::string numfile = "numbers.dat";
-    client user1(std::string("mr.president1"), std::string("obamasas last name"));
+    while(option != 4){
+        std::cout << "What would you like to do?\n1:register  2:read users  3:login(pending)  4:exit\n";
+        std::cin >> option;
+        if(option == 1){ //register
+            std::cin.ignore(1, '\n');
 
-    //writeElement(stream, writefile, numfile, user1);
-    int num = getCharacter(stream, numfile);
-    std::cout << num;//please work for gods sake
+            //getting user input
+            std::string desiredName;
+            std::cout << "Username: ";
+            std::cin >> desiredName;
+            std::string desiredPassword;
+            std::cout << "Password: ";
+            std::cin >> desiredPassword;
+
+            //creating and writing user to file
+            client desiredClient(desiredName, desiredPassword);
+            writeElement(stream, writefile, numfile, desiredClient);
+        }
+        else if(option == 2){
+            ReadElements(stream, numstream, writefile, numfile);
+        }
+    }
     return 0;
 }
