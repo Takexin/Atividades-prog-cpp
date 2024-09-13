@@ -49,7 +49,6 @@ void setCharacter(std::fstream &stream, std::string filename, int num){
         std::cerr << "Failed to open file: " << filename << std::endl;
         exit(1);
     }
-    stream.seekp(0);
     stream.write(reinterpret_cast<char * >(&num), sizeof(int));
     stream.close();
 }
@@ -71,13 +70,13 @@ void writeElement(std::fstream & stream, std::string filename, std::string numfi
     //serialization
 
     //writing name
-    int usernameSize = user.getUsername().length();
+    int usernameSize = sizeof(desiredName);
     stream.write(reinterpret_cast<char * >(&usernameSize), sizeof(int));
 
     stream.write(reinterpret_cast<char *> (&desiredName), usernameSize);
 
     //writing password
-    int passwordSize = user.getPassword().length();
+    int passwordSize = sizeof(desiredPassword);
     stream.write(reinterpret_cast<char *>(&passwordSize), sizeof(int));
 
     stream.write(reinterpret_cast<char *> (&desiredPassword), passwordSize);
@@ -87,35 +86,41 @@ void ReadElements(std::fstream & stream, std::fstream & numstream, std::string f
     int num = getCharacter(numstream, numfile);
     std::cout << num << '\n';
 
-    client userTest;
+    client *userTest = new client;
     stream.open(filename, std::ios_base::in | std::ios_base::binary);
     if (!stream.is_open()) {
         std::cerr << "Failed to open file: " << filename << std::endl;
         exit(1);
     }
+    stream.seekg(0);
     //reading name
-    int nameLen;
+    int nameLen=0;
     stream.read(reinterpret_cast<char *> (&nameLen), sizeof(int));
+    std::cout << "Size of name: " << nameLen << '\n';
     std::string name;
     stream.read(reinterpret_cast<char *> (&name), nameLen);
-
-    userTest.setUsername(name);
+    std::cout << name << std::endl;
+    userTest->setUsername(name);
 
     //reading password
-    int passLen;
+    int passLen = 0;
     stream.read(reinterpret_cast<char *> (&passLen), sizeof(int));
     std::string pass;
     stream.read(reinterpret_cast<char *> (&pass), passLen);
-    userTest.setPassword(pass);
-    //display(userTest);
+    
+    std::cout << "Size of pass: " << passLen << '\n';
+    userTest->setPassword(pass);
+    display(*userTest);
+    delete userTest;
+    stream.close();
 
-    // stream.read(reinterpret_cast <char *> (&userTest), num * sizeof(client));
-    // std::cout << sizeof(userTest) << ' ' << sizeof(client) << '\n';
-    // std::cout << "usrname" << userTest.getPassword();
-    // for(int i = 0; i < num; i++){
-    //     std::cout << userTest.getPassword() << '\n';
-    //     std::cout << userTest.getUsername() << '\n';
-    // }
+    //stream.read(reinterpret_cast <char *> (&userTest), num * sizeof(client));
+    //std::cout << sizeof(userTest) << ' ' << sizeof(client) << '\n';
+    //std::cout << "usrname" << userTest.getPassword();
+    //for(int i = 0; i < num; i++){
+    //    std::cout << userTest.getPassword() << '\n';
+    //    std::cout << userTest.getUsername() << '\n';
+    //}
 }
 int option;
 
@@ -144,6 +149,12 @@ int main(){
         }
         else if(option == 2){
             ReadElements(stream, numstream, writefile, numfile);
+        }
+        else if(option == 5){
+            std::cin.ignore(1, '\n');
+            int num;
+            std::cin >> num;
+            setCharacter(stream, numfile, num);
         }
     }
     return 0;
