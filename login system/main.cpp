@@ -128,15 +128,11 @@ void login(std::string& loginName, std::string& loginPass,std::fstream &stream, 
         exit(1);
     }
     for (i; i <= num; i++) {
-    
         // Read username
         int nameLen = 0;
         stream.read(reinterpret_cast<char*>(&nameLen), sizeof(int));
         std::string name(nameLen, '\0');
         stream.read(&name[0], nameLen);
-    
-
-
         // Read password
         int passLen = 0;
         stream.read(reinterpret_cast<char*>(&passLen), sizeof(int));
@@ -155,8 +151,6 @@ void login(std::string& loginName, std::string& loginPass,std::fstream &stream, 
         std::cout << "Username or Password incorrect!\n\n";
     }
 }
-
-
 int option;
 
 int main() {
